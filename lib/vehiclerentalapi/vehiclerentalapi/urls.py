@@ -4,7 +4,7 @@ from api import views
 from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash = False)
-router.register('vehicledetails', views.VehicleView)    
+router.register('vehicles', views.VehicleView)    
 
 urlpatterns = [
     path('', include(router.urls)),

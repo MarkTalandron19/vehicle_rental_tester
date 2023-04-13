@@ -1,3 +1,3 @@
 class Env {
-  static const String url = "http://10.0.2.2:8000";
+  static const String prefix = "http://localhost:8000";
 }

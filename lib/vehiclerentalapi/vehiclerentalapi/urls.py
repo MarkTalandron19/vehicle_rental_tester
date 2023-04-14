@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from api import views
+from api.views import getVehicles
 from rest_framework import routers
 
-router = routers.DefaultRouter(trailing_slash = False)
-router.register('vehicles', views.VehicleView)    
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path('vehicles/', getVehicles, name = 'vehicles'),
     path('admin/', admin.site.urls),
 ]

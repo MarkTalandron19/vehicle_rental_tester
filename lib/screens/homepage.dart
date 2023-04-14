@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<List<Vehicle>>? vehicles;
+  late Future<List<Vehicle>> vehicles;
   final vehicleListKey = GlobalKey<_HomePageState>();
 
   @override
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Vehicle>> getVehicles() async {
-    final response = await http.get(Uri.parse('${Env.prefix}/vehicledetails'));
+    final response = await http.get(Uri.parse('${Env.prefix}/vehicles'));
 
     final items = json.decode(response.body).cast<Map<String, dynamic>>();
     List<Vehicle> vehicles = items.map<Vehicle>((json) {

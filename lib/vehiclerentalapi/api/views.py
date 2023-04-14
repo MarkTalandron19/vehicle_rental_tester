@@ -12,6 +12,12 @@ class AccountView(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
 
+@api_view(['GET'])
+def getAccounts(request):
+    queryset = Account.objects.all()
+    serializer = AccountSerializer(queryset, many = True)
+    return Response(serializer.data)
+
 class VehicleView(viewsets.ModelViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer    
@@ -25,3 +31,9 @@ def getVehicles(request):
 class RentalView(viewsets.ModelViewSet):
     queryset = RentalAgreement.objects.all()
     serializer_class = RentalAgreementSerializer
+
+@api_view(['GET'])
+def getAgreements(request):
+    queryset = RentalAgreement.objects.all()
+    serializer = RentalAgreementSerializer(queryset, many = True)
+    return Response(serializer.data)

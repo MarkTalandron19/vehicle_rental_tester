@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
+import 'package:vehicle_rental/screens/loginpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
-      routes: {'/': (context) => const HomePage()},
+      routes: {'/': (context) => const LogInPage()},
     );
   }
 }

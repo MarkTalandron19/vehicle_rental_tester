@@ -6,6 +6,7 @@ class Vehicle {
   final String vehicleManufacturer;
   final String vehicleType;
   final double vehicleRentRate;
+  final String image;
 
   Vehicle(
       {required this.vehicleID,
@@ -14,7 +15,8 @@ class Vehicle {
       required this.vehicleBrand,
       required this.vehicleManufacturer,
       required this.vehicleType,
-      required this.vehicleRentRate});
+      required this.vehicleRentRate,
+      required this.image});
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
@@ -25,6 +27,7 @@ class Vehicle {
       vehicleManufacturer: json['vehicleManufacturer'],
       vehicleType: json['vehicleType'],
       vehicleRentRate: json['vehicleRentRate'],
+      image: json['image'],
     );
   }
 
@@ -35,6 +38,7 @@ class Vehicle {
         'vehicleBrand': vehicleBrand,
         'vehicleManufacturer': vehicleManufacturer,
         'vehicleType': vehicleType,
-        'vehicleRentRate': vehicleRentRate
+        'vehicleRentRate': vehicleRentRate,
+        'image': image
       };
 }

@@ -18,6 +18,7 @@ class Vehicle(models.Model):
     vehicleManufacturer = models.CharField(max_length=100)
     vehicleType = models.CharField(max_length=100)
     vehicleRentRate = models.FloatField()
+    image = models.CharField(max_length=1000, default= None)
     class Meta:
         db_table = "vehicle"
 

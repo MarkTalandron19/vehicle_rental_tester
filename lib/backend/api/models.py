@@ -22,10 +22,10 @@ class Vehicle(models.Model):
         db_table = "vehicle"
 
 class RentalAgreement(models.Model):
-    rentID = models.CharField(max_length=100)
+    rentID = models.CharField(max_length=100, primary_key=True)
     rentDate = models.DateField()
     numberOfDays = models.PositiveIntegerField()
-    accountID = models.ForeignKey('Account', on_delete=models.CASCADE)
-    vehicleID = models.ForeignKey('Vehicle', on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
     class Meta:
         db_table = "rental_agreement"

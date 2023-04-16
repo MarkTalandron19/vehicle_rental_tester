@@ -18,14 +18,15 @@ class Vehicle(models.Model):
     vehicleManufacturer = models.CharField(max_length=100)
     vehicleType = models.CharField(max_length=100)
     vehicleRentRate = models.FloatField()
+    image = models.CharField(max_length=1000, default= None)
     class Meta:
         db_table = "vehicle"
 
 class RentalAgreement(models.Model):
-    rentID = models.CharField(max_length=100)
+    rentID = models.CharField(max_length=100, primary_key=True)
     rentDate = models.DateField()
     numberOfDays = models.PositiveIntegerField()
-    accountID = models.ForeignKey('Account', on_delete=models.CASCADE)
-    vehicleID = models.ForeignKey('Vehicle', on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
     class Meta:
         db_table = "rental_agreement"

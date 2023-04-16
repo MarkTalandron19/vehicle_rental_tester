@@ -13,16 +13,11 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = ['vehicleID',  'vehicleName', 'vehicleModel', 'vehicleBrand',
-                  'vehicleManufacturer',  'vehicleType', 'vehicleRentRate']
+                  'vehicleManufacturer',  'vehicleType', 'vehicleRentRate', 'image']
 
 
 class RentalAgreementSerializer(serializers.ModelSerializer):
     class Meta:
         model = RentalAgreement
-        fields = [
-            'rentID',
-            'rentDate',
-            'numberOfDays',
-            'accountID',
-            'vehicleID'
-        ]
+        fields = ['rentID', 'rentDate', 'numberOfDays', 'account_id', 'vehicle_id'
+                  ]

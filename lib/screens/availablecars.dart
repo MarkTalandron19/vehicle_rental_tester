@@ -38,53 +38,78 @@ class _AvailableCarsState extends State<AvailableCars> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: vehicles,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) return const CircularProgressIndicator();
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              childAspectRatio: 0.75,
-            ),
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              var data = snapshot.data[index];
-              return Card(
-                  child: Column(
-                children: [
-                  Expanded(
-                      child: Image.asset(
-                    data.image,
-                    fit: BoxFit.cover,
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          data.vehicleName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Available Cars'),
+      ),
+      body: Center(
+        child: FutureBuilder(
+            future: vehicles,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) return const CircularProgressIndicator();
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  childAspectRatio: 0.75,
+                ),
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var data = snapshot.data[index];
+                  return Card(
+                      child: Column(
+                    children: [
+                      SizedBox(
+                          width: 210,
+                          height: 150,
+                          child: Image.asset(
+                            data.image,
+                            fit: BoxFit.cover,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Name: ${data.vehicleName}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Model: ${data.vehicleModel}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Brand: ${data.vehicleBrand}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Rental Rate: ${data.vehicleRentRate}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          data.vehicleModel,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ));
-            },
-          );
-        });
+                      )
+                    ],
+                  ));
+                },
+              );
+            }),
+      ),
+    );
   }
 }

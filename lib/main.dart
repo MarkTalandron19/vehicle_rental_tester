@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
-import 'package:vehicle_rental/screens/homepage.dart';
 import 'package:vehicle_rental/screens/loginpage.dart';
+import 'package:vehicle_rental/screens/registerpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
-      routes: {'/': (context) => const AvailableCars()},
+      routes: {'/': (context) => const LogInPage()},
     );
   }
 }

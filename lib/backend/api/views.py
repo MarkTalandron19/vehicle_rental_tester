@@ -18,6 +18,12 @@ def getAccounts(request):
     serializer = AccountSerializer(queryset, many = True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def getLogIn(request, username, password):
+    result = Account.objects.get(username = username, password = password)
+    serializer = AccountSerializer(result, many = True)
+    return Response(serializer.data)
+
 class VehicleView(viewsets.ModelViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer    

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vehicle_rental/screens/registerpage.dart';
+
+import '../models/account.dart';
 
 class LogInPage extends StatelessWidget {
   const LogInPage({super.key});
@@ -10,6 +10,8 @@ class LogInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var width = size.width;
+    TextEditingController _usernameController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -41,8 +43,9 @@ class LogInPage extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: width * .85,
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: 'Username'),
                     ),
                   ),
@@ -51,9 +54,10 @@ class LogInPage extends StatelessWidget {
                   ),
                   SizedBox(
                     width: width * .85,
-                    child: const TextField(
+                    child: TextField(
+                      controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: 'Password'),
                     ),
                   ),

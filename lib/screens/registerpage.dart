@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+import 'package:vehicle_rental/models/account.dart';
+import 'dart:convert';
+
+import '../env.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -7,6 +13,11 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var width = size.width;
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController firstNameController = TextEditingController();
+    TextEditingController lastNameController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -19,8 +30,9 @@ class RegisterPage extends StatelessWidget {
           children: [
             SizedBox(
               width: width * .85,
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: usernameController,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'Username'),
               ),
             ),
@@ -29,9 +41,10 @@ class RegisterPage extends StatelessWidget {
             ),
             SizedBox(
               width: width * .85,
-              child: const TextField(
+              child: TextField(
+                controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
                 ),
@@ -42,8 +55,9 @@ class RegisterPage extends StatelessWidget {
             ),
             SizedBox(
               width: width * .85,
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: firstNameController,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'First Name'),
               ),
             ),
@@ -52,8 +66,9 @@ class RegisterPage extends StatelessWidget {
             ),
             SizedBox(
               width: width * .85,
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: lastNameController,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'Last Name'),
               ),
             ),
@@ -64,7 +79,25 @@ class RegisterPage extends StatelessWidget {
               width: width * .85,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  String id = const Uuid().v4();
+                  Account newAccount = Account(
+                      accountID: id,
+                      username: usernameController.text,
+                      password: passwordController.text,
+                      firstName: firstNameController.text,
+                      lastName: lastNameController.text,
+                      accountRole: 'User');
+                  Map<String, String> headers = {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                  };
+
+                  String url = '${Env.prefix}/register/';
+
+                  http.post(Uri.parse(url),
+                      headers: headers, body: jsonEncode(newAccount.toJson()));
+                },
                 child: const Text('Submit'),
               ),
             ),

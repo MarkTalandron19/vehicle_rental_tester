@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.urls import path
-from api.views import getAccounts, getVehicles, getAgreements, getLogIn, AccountView
+from api.views import AccountView, VehicleView, RentalView
 
 urlpatterns = [
-    path('accounts/', getAccounts, name = 'Accounts'),
-    path('login/<str:username>/<str:password>/', getLogIn, name = 'Log In'),
-    path('vehicles/', getVehicles, name = 'Vehicles'),
-    path('agreements/', getAgreements, name = 'Agreements'),
+    path('accounts/', AccountView.getAccounts, name = 'Accounts'),
+    path('login/<str:username>/<str:password>/', AccountView.getLogIn, name = 'Log In'),
+    path('vehicles/', VehicleView.getVehicles, name = 'Vehicles'),
+    path('agreements/', RentalView.getAgreements, name = 'Agreements'),
     path('admin/', admin.site.urls),
     path('register/', AccountView.register, name = 'Register')
 ]

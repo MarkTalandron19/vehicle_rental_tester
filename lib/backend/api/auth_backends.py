@@ -1,6 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
-
-from lib.backend.api.models import Account
+from api.models import Account
 
 class AccountBackend(ModelBackend):
     def authenticate(self, request, username = None, password = None, **kwargs):

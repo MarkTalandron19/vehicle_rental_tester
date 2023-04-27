@@ -14,6 +14,8 @@ class AccountWidget extends StatelessWidget {
         children: [
           Text('Username: ${account?.username}'),
           Text('Password: ${account?.password}'),
+          Text('First Name: ${account?.firstName}'),
+          Text('Last Name: ${account?.lastName}'),
         ],
       ),
     );

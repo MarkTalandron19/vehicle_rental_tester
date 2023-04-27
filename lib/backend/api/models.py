@@ -1,7 +1,21 @@
 from django.db import models
+from django.contrib.auth.models import  AbstractBaseUser, BaseUserManager, PermissionsMixin 
 
+class AccountManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError('The Username field must be set')
+        user = self.model(username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class Account(models.Model):
+    def create_superuser(self, username, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(username, password, **extra_fields)
+    
+class Account(AbstractBaseUser, PermissionsMixin):
     accountID = models.CharField(max_length=100, primary_key=True)
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100, unique=True)
@@ -13,7 +27,9 @@ class Account(models.Model):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['password', 'firstName', 'lastName', 'accountRole']
+    REQUIRED_FIELDS = ['accountRole']
+
+    objects = AccountManager()
 
     class Meta:
         db_table = "account"
@@ -35,6 +51,7 @@ class Vehicle(models.Model):
     vehicleManufacturer = models.CharField(max_length=100)
     vehicleType = models.CharField(max_length=100)
     vehicleRentRate = models.FloatField()
+    available = models.BooleanField(default=True)
     image = models.CharField(max_length=1000, default=None)
 
     class Meta:

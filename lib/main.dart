@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/loginpage.dart';
 import 'package:vehicle_rental/screens/registerpage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => AccountProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

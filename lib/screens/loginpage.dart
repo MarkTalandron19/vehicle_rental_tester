@@ -29,7 +29,6 @@ class LogInPage extends StatelessWidget {
       final account = Account.fromJson(jsonBody);
       return account;
     } else {
-      print('Error: ${response.statusCode} - ${response.body}');
       throw Exception('Failed to login');
     }
   }

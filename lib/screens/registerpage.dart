@@ -87,7 +87,10 @@ class RegisterPage extends StatelessWidget {
                       password: passwordController.text,
                       firstName: firstNameController.text,
                       lastName: lastNameController.text,
-                      accountRole: 'User');
+                      accountRole: 'User',
+                      isActive: true,
+                      isStaff: false,
+                      isSuperuser: false);
                   Map<String, String> headers = {
                     'Content-type': 'application/json',
                     'Accept': 'application/json',
@@ -97,6 +100,8 @@ class RegisterPage extends StatelessWidget {
 
                   http.post(Uri.parse(url),
                       headers: headers, body: jsonEncode(newAccount.toJson()));
+
+                  Navigator.pop(context);
                 },
                 child: const Text('Submit'),
               ),

@@ -1,10 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:http/http.dart' as http;
-
 import '../env.dart';
 import '../models/Vehicle.dart';
 
@@ -58,54 +54,79 @@ class _AvailableCarsState extends State<AvailableCars> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var data = snapshot.data[index];
-                  return Card(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                          width: 210,
-                          height: 150,
-                          child: Image.asset(
-                            data.image,
-                            fit: BoxFit.cover,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Name: ${data.vehicleName}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  return GestureDetector(
+                    onTap: data.available ? () {} : null,
+                    child: Opacity(
+                      opacity: data.available ? 1.0 : 0.5,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          SizedBox(
+                              width: 210,
+                              height: 150,
+                              child: data.available
+                                  ? Image.asset(
+                                      data.image,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.grey, BlendMode.saturation),
+                                      child: Opacity(
+                                        opacity: 0.5,
+                                        child: Image.asset(
+                                          data.image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Name: ${data.vehicleName}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Model: ${data.vehicleModel}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Brand: ${data.vehicleBrand}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Rental Rate: ${data.vehicleRentRate}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Available: ${data.available ? 'Yes' : 'No'}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
                             ),
-                            Text(
-                              'Model: ${data.vehicleModel}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Brand: ${data.vehicleBrand}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Rental Rate: ${data.vehicleRentRate}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ));
+                          )
+                        ],
+                      )),
+                    ),
+                  );
                 },
               );
             }),

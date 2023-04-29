@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/loginpage.dart';
-import 'package:vehicle_rental/screens/registerpage.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(

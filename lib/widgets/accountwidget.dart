@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import '../models/account.dart';
 
 class AccountWidget extends StatelessWidget {
@@ -9,13 +7,54 @@ class AccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Profile'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Username: ${account?.username}'),
-          Text('Password: ${account?.password}'),
-          Text('First Name: ${account?.firstName}'),
-          Text('Last Name: ${account?.lastName}'),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Username: ${account?.username}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Password: ${account?.password}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            'First Name: ${account?.firstName}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Last Name: ${account?.lastName}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
         ],
       ),
     );

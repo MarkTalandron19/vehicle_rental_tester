@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vehicle_rental/providers/accountprovider.dart';
-import 'package:vehicle_rental/widgets/accountwidget.dart';
+import 'package:vehicle_rental/screens/availablecars.dart';
+import 'package:vehicle_rental/screens/profilescreen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,15 +8,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Home Page'),
-      ),
-      body: Consumer<AccountProvider>(builder: (context, value, child) {
-        return AccountWidget(
-          account: value.acc,
-        );
-      }),
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Home Page'),
+        ),
+        body: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()));
+                },
+                child: const Text('Profile')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AvailableCars()));
+                },
+                child: const Text('Rent a Car'))
+          ],
+        ));
   }
 }

@@ -9,5 +9,6 @@ urlpatterns = [
     path('agreements/', RentalView.getAgreements, name = 'Agreements'),
     path('admin/', admin.site.urls),
     path('register/', AccountView.register, name = 'Register'),
-    path('test/', AccountView.testAccount, name = 'Test')
+    path('test/', AccountView.testAccount, name = 'Test'),
+    path('accounts/<str:accountID>/vehicles/<str:vehicleID>/rentals/', RentalView.createRental, name = 'Create Rental')
 ]

@@ -14,7 +14,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = ['vehicleID',  'vehicleName', 'vehicleModel', 'vehicleBrand',
-                  'vehicleManufacturer',  'vehicleType', 'vehicleRentRate', 'image']
+                  'vehicleManufacturer',  'vehicleType', 'vehicleRentRate', 'available', 'image']
 
 
 class RentalAgreementSerializer(serializers.ModelSerializer):

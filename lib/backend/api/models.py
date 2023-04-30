@@ -62,6 +62,7 @@ class RentalAgreement(models.Model):
     rentID = models.CharField(max_length=100, primary_key=True)
     rentDate = models.DateField()
     numberOfDays = models.PositiveIntegerField()
+    rentDue = models.FloatField(default= 0)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
 

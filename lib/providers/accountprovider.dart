@@ -9,6 +9,7 @@ class AccountProvider extends ChangeNotifier {
   Account? _account;
 
   Account? get acc => _account;
+  String? get id => _account?.accountID;
 
   Future<bool> login(String username, String password) async {
     final response = await http.post(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vehicle_rental/screens/rentscreen.dart';
 import '../env.dart';
 import '../models/Vehicle.dart';
 
@@ -54,8 +55,17 @@ class _AvailableCarsState extends State<AvailableCars> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var data = snapshot.data[index];
-                  return GestureDetector(
-                    onTap: data.available ? () {} : null,
+                  return InkWell(
+                    onTap: data.available
+                        ? () {
+                            Vehicle vehicle = data;
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => RentScreen(
+                                      key: UniqueKey(),
+                                      current: vehicle,
+                                    )));
+                          }
+                        : null,
                     child: Opacity(
                       opacity: data.available ? 1.0 : 0.5,
                       child: Card(

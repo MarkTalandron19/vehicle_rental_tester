@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/profilescreen.dart';
+import 'package:vehicle_rental/screens/rentedcars.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,7 +26,13 @@ class HomePage extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const AvailableCars()));
                 },
-                child: const Text('Rent a Car'))
+                child: const Text('Rent a Car')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RentedCars()));
+                },
+                child: const Text('Rented Cars')),
           ],
         ));
   }

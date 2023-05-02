@@ -20,5 +20,5 @@ class VehicleSerializer(serializers.ModelSerializer):
 class RentalAgreementSerializer(serializers.ModelSerializer):
     class Meta:
         model = RentalAgreement
-        fields = ['rentID', 'rentDate', 'numberOfDays', 'rentDue', 'account_id', 'vehicle_id'
+        fields = ['rentID', 'rentDate', 'numberOfDays', 'rentDue', 'account', 'vehicle'
                   ]

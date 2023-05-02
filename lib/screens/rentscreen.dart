@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vehicle_rental/models/Vehicle.dart';
@@ -52,10 +53,12 @@ class RentScreen extends StatelessWidget {
               onPressed: () {
                 String id = const Uuid().v4();
                 String accountID = context.read<AccountProvider>().id!;
+                DateTime now = DateTime.now();
+                String formattedDate = DateFormat('yyyy-MM-dd').format(now);
                 int days = int.parse(daysController.text);
                 RentalAgreement newAgreement = RentalAgreement(
                   rentID: id,
-                  rentDate: DateTime.now().toString(),
+                  rentDate: formattedDate,
                   numberOfDays: days,
                   rentDue: (current.vehicleRentRate * days) * 100,
                   account: accountID,
@@ -66,8 +69,7 @@ class RentScreen extends StatelessWidget {
                   'Accept': 'application/json',
                 };
 
-                String url =
-                    '${Env.prefix}/accounts/$accountID/vehicles/${current.vehicleID}/rentals/';
+                String url = '${Env.prefix}/rent/';
 
                 http.post(Uri.parse(url),
                     headers: headers, body: jsonEncode(newAgreement.toJson()));

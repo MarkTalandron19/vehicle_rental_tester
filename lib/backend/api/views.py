@@ -1,6 +1,5 @@
 from django.utils import timezone
 import json
-from pstats import Stats
 import statistics
 from api.models import Account, Vehicle, RentalAgreement
 from api.serializers import AccountSerializer, VehicleSerializer, RentalAgreementSerializer
@@ -26,7 +25,7 @@ class AccountView(viewsets.ModelViewSet):
             accountRole=account_data['accountRole']
         )
         serializer = AccountSerializer(account)
-        return Response(serializer.data, status=Stats.HTTP_201_CREATED)
+        return Response(serializer.data)
 
     @api_view(['GET'])
     def getAccounts(request):
@@ -93,6 +92,18 @@ class VehicleView(viewsets.ModelViewSet):
         vehicle.image = request.POST.get('image', vehicle.image)
         vehicle.save()
     
+    @api_view(['POST'])
+    def getRentedCars(request):
+        rent_data = json.loads(request.body)
+        account_id = rent_data['account']
+        try:
+            account = Account.objects.get(pk = account_id)
+        except Account.DoesNotExist:
+            print(f"Account not found")
+        rented_vehicles =  Vehicle.objects.filter(rentalagreement__account = account).distinct()
+        serializer = VehicleSerializer(rented_vehicles, many = True)
+        return Response(serializer.data)
+    
 class RentalView(viewsets.ModelViewSet):
     queryset = RentalAgreement.objects.all()
     serializer_class = RentalAgreementSerializer
@@ -104,10 +115,18 @@ class RentalView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @api_view(['POST'])
-    def createRental(request, accountID, vehicleID):
-        account = Account.objects.get(pk = accountID)
-        vehicle = Vehicle.objects.get(pk = vehicleID)
+    def createRental(request):
         rent_data = json.loads(request.body)
+        account_id = rent_data['account']
+        vehicle_id = rent_data['vehicle']
+        try:
+            account = Account.objects.get(pk = account_id)
+        except Account.DoesNotExist:
+            print(f"Account not found")
+        try:
+            vehicle = Vehicle.objects.get(pk = vehicle_id)
+        except Vehicle.DoesNotExist:
+            print(f"Vehicle not found")
         rent = RentalAgreement.objects.create(
             rentID = rent_data['rentID'],
             rentDate = rent_data['rentDate'],
@@ -118,7 +137,7 @@ class RentalView(viewsets.ModelViewSet):
         vehicle.available = False
         vehicle.save()
         serializer = RentalAgreementSerializer(rent)
-        return Response(serializer.data, status=Stats.HTTP_201_CREATED)
+        return Response(serializer.data)
     
     @api_view(['POST'])
     def updateRent(request, rentID):

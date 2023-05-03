@@ -7,12 +7,9 @@ class AccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Profile'),
-      ),
-      body: Column(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
@@ -20,16 +17,6 @@ class AccountWidget extends StatelessWidget {
           ),
           Text(
             'Username: ${account?.username}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          Text(
-            'Password: ${account?.password}',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,

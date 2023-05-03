@@ -70,10 +70,11 @@ class _AvailableCarsState extends State<AvailableCars> {
                       opacity: data.available ? 1.0 : 0.5,
                       child: Card(
                           child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           SizedBox(
-                              width: 210,
-                              height: 150,
+                              height: 130,
                               child: data.available
                                   ? Image.asset(
                                       data.image,

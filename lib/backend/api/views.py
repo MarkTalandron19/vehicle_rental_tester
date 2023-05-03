@@ -17,12 +17,12 @@ class AccountView(viewsets.ModelViewSet):
     def register(request):
         account_data = json.loads(request.body)
         account = Account.objects.create(
-            accountID=account_data['accountID'],
-            username=account_data['username'],
-            password=account_data['password'],
-            firstName=account_data['firstName'],
-            lastName=account_data['lastName'],
-            accountRole=account_data['accountRole']
+            accountID = account_data['accountID'],
+            username = account_data['username'],
+            password = account_data['password'],
+            firstName = account_data['firstName'],
+            lastName = account_data['lastName'],
+            accountRole = account_data['accountRole']
         )
         serializer = AccountSerializer(account)
         return Response(serializer.data)
@@ -61,12 +61,14 @@ class AccountView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
-    def updateAccount(request, accountID):
-        account = Account.objects.get(pk = accountID)
-        account.username = request.POST.get('username', account.username)
-        account.password = request.POST.get('password', account.password)
-        account.firstName = request.POST.get('firstName', account.firstName)
-        account.lastName =  request.POST.get('lastName', account.password)
+    def updateAccount(request):
+        account_data = json.loads(request.body)
+        account_id = account_data['account']
+        account = Account.objects.get(pk = account_id)
+        account.username = account_data['username']
+        account.password = account_data['password']
+        account.firstName = account_data['firstName']
+        account.lastName =  account_data['lastName']
         account.save()
 
 class VehicleView(viewsets.ModelViewSet):
@@ -80,8 +82,10 @@ class VehicleView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
-    def update_vehicle(request, vehicleID):
-        vehicle = Vehicle.objects.get(pk = vehicleID)
+    def update_vehicle(request):
+        vehicle_data = json.loads(request.body)
+        vehicle_id = vehicle_data['vehicleID']
+        vehicle = Vehicle.objects.get(pk = vehicle_id)
         vehicle.vehicleName = request.POST.get('vehicleName', vehicle.vehicleName)
         vehicle.vehicleModel = request.POST.get('vehicleModel', vehicle.vehicleModel)
         vehicle.vehicleBrand = request.POST.get('vehicleBrand', vehicle.vehicleBrand)
@@ -140,10 +144,12 @@ class RentalView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
-    def updateRent(request, rentID):
-        rent = RentalAgreement.objects.get(pk = rentID)
-        rent.rentDate = request.POST.get('rentDate', rent.rentDate)
-        rent.numberOfDays = request.POST.get('numberOfDays', rent.numberOfDays)
+    def updateRent(request):
+        rent_data = json.loads(request.body)
+        rent_id = rent_data['rentID']
+        rent = RentalAgreement.objects.get(pk = rent_id)
+        rent.rentDate = rent_data['rentDate']
+        rent.numberOfDays = rent_data['numberOfDays']
         rent.save()
 
 

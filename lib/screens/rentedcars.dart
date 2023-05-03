@@ -54,14 +54,14 @@ class _RentedCarsState extends State<RentedCars> {
                   var data = snapshot.data[index];
                   return Card(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(
-                            width: 210,
-                            height: 150,
                             child: Image.asset(
-                              data.image,
-                              fit: BoxFit.cover,
-                            )),
+                          data.image,
+                          fit: BoxFit.cover,
+                        )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(

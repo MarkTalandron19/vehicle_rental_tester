@@ -8,7 +8,11 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Profile'),
+      ),
       body: Consumer<AccountProvider>(
         builder: (context, value, child) {
           return AccountWidget(
@@ -16,6 +20,6 @@ class ProfileScreen extends StatelessWidget {
           );
         },
       ),
-    ));
+    );
   }
 }

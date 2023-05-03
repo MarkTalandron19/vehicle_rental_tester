@@ -86,12 +86,12 @@ class VehicleView(viewsets.ModelViewSet):
         vehicle_data = json.loads(request.body)
         vehicle_id = vehicle_data['vehicleID']
         vehicle = Vehicle.objects.get(pk = vehicle_id)
-        vehicle.vehicleName = request.POST.get('vehicleName', vehicle.vehicleName)
-        vehicle.vehicleModel = request.POST.get('vehicleModel', vehicle.vehicleModel)
-        vehicle.vehicleBrand = request.POST.get('vehicleBrand', vehicle.vehicleBrand)
-        vehicle.vehicleManufacturer = request.POST.get('vehicleManufacturer', vehicle.vehicleManufacturer)
-        vehicle.vehicleType = request.POST.get('vehicleType', vehicle.vehicleType)
-        vehicle.vehicleRentRate = request.POST.get('vehicleRentRate', vehicle.vehicleRentRate)
+        vehicle.vehicleName = vehicle_data['vehicleName']
+        vehicle.vehicleModel = vehicle_data['vehicleModel']
+        vehicle.vehicleBrand = vehicle_data['vehicleBrand']
+        vehicle.vehicleManufacturer = vehicle_data['vehicleManufacturer']
+        vehicle.vehicleType = vehicle_data['vehicleType']
+        vehicle.vehicleRentRate = vehicle_data['vehicleRentRate']
         vehicle.available = request.POST.get('available', vehicle.available)
         vehicle.image = request.POST.get('image', vehicle.image)
         vehicle.save()
@@ -152,4 +152,10 @@ class RentalView(viewsets.ModelViewSet):
         rent.numberOfDays = rent_data['numberOfDays']
         rent.save()
 
+    @api_view(['POST'])
+    def getDue(request):
+        data = json.loads(request.body)
+        account_id = data['account']
+        vehicle_id = data['vehicle']
+        
 

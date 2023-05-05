@@ -11,5 +11,6 @@ urlpatterns = [
     path('register/', AccountView.register, name = 'Register'),
     path('test/', AccountView.testAccount, name = 'Test'),
     path('rent/', RentalView.createRental, name = 'Create Rental'),
-    path('rented/', VehicleView.getRentedCars, name = 'Rented')
+    path('rented/', VehicleView.getRentedCars, name = 'Rented'),
+    path('due/', RentalView.getDue, name = 'Due')
 ]

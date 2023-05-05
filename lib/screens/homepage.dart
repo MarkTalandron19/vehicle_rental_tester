@@ -15,11 +15,94 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Home'),
+          actions: <Widget>[
+            ElevatedButton(
+                onPressed: () {
+                  context.read<AccountProvider>().setNull();
+                  Navigator.pop(context);
+                },
+                child: const Text('Log Out'))
+          ],
         ),
         drawer: getDrawer(context),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [],
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: 36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Icon(Icons.search),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Expanded(
+                        child: TextField(
+                          style: TextStyle(
+                            fontSize: 17,
+                            letterSpacing: -0.41,
+                          ),
+                          decoration: InputDecoration(
+                              hintText: "Search",
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 17,
+                                letterSpacing: -0.41,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Card(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'New Arrivals',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Card(
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Recent Transaction',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () {

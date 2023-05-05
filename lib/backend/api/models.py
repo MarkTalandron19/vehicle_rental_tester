@@ -50,7 +50,7 @@ class Vehicle(models.Model):
     vehicleBrand = models.CharField(max_length=100)
     vehicleManufacturer = models.CharField(max_length=100)
     vehicleType = models.CharField(max_length=100)
-    vehicleRentRate = models.FloatField()
+    vehicleRentRate = models.FloatField(default = 0.0)
     available = models.BooleanField(default=True)
     image = models.CharField(max_length=1000, default=None)
 
@@ -62,7 +62,7 @@ class RentalAgreement(models.Model):
     rentID = models.CharField(max_length=100, primary_key=True)
     rentDate = models.DateField()
     numberOfDays = models.PositiveIntegerField()
-    rentDue = models.FloatField(default= 0)
+    rentDue = models.FloatField(default = 0.0)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
 

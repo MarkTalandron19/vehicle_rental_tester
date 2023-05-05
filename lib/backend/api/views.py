@@ -135,6 +135,7 @@ class RentalView(viewsets.ModelViewSet):
             rentID = rent_data['rentID'],
             rentDate = rent_data['rentDate'],
             numberOfDays = rent_data['numberOfDays'],
+            rentDue = rent_data['rentDue'],
             account = account,
             vehicle = vehicle,    
         )
@@ -157,5 +158,12 @@ class RentalView(viewsets.ModelViewSet):
         data = json.loads(request.body)
         account_id = data['account']
         vehicle_id = data['vehicle']
+
+        try:
+            rental_agreement = RentalAgreement.objects.get(account = account_id, vehicle = vehicle_id)
+            serializer = RentalAgreementSerializer(rental_agreement)
+            return Response(serializer.data)
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')    
         
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vehicle_rental/env.dart';
+import 'package:vehicle_rental/models/rentalagreement.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import '../models/Vehicle.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ class RentedCars extends StatefulWidget {
 
 class _RentedCarsState extends State<RentedCars> {
   late Future<List<Vehicle>> rented;
+  Map<String, double> rentDueMap = {};
 
   @override
   void initState() {
@@ -36,6 +38,26 @@ class _RentedCarsState extends State<RentedCars> {
     return rents;
   }
 
+  Future<void> getRentDue(String vehicleID) async {
+    final response = await http.post(
+      Uri.parse('${Env.prefix}/due/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'account': context.read<AccountProvider>().id,
+        'vehicle': vehicleID
+      }),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      RentalAgreement agreement = RentalAgreement.fromJson(data);
+      setState(() {
+        rentDueMap[vehicleID] = agreement.rentDue;
+      });
+    } else {
+      throw Exception('Failed to get rent due');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +74,9 @@ class _RentedCarsState extends State<RentedCars> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var data = snapshot.data[index];
+                  if (!rentDueMap.containsKey(data.vehicleID)) {
+                    getRentDue(data.vehicleID);
+                  }
                   return Card(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -89,7 +114,7 @@ class _RentedCarsState extends State<RentedCars> {
                                 ),
                               ),
                               Text(
-                                'Rental Rate: ${data.vehicleRentRate}',
+                                'Amount Due: ${rentDueMap[data.vehicleID] ?? ""}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

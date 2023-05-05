@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
 
 class ReceiptScreen extends StatelessWidget {
@@ -45,6 +43,8 @@ class ReceiptScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                       onPressed: () {
+                        Navigator.of(context)
+                            .popUntil((route) => route.settings.name == '/');
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const HomePage(),
                         ));

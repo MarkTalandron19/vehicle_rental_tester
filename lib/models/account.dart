@@ -48,6 +48,9 @@ class Account {
         'firstName': firstName,
         'lastName': lastName,
         'accountRole': accountRole,
+        'is_active': isActive,
+        'is_staff': isStaff,
+        'is_superuser': isSuperuser,
       };
 
   static Future<Account> login(String username, String password) async {

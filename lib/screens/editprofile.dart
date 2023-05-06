@@ -1,23 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 
+import 'package:http/http.dart' as http;
+import '../env.dart';
+import '../models/account.dart';
+import 'homepage.dart';
+
 class EditProfile extends StatelessWidget {
   const EditProfile({super.key});
-
-  Widget edit(String title, TextEditingController controller) {
-    return Row(
-      children: [
-        Text('$title:'),
-        const SizedBox(
-          width: 10,
-        ),
-        TextField(
-          controller: controller,
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +85,37 @@ class EditProfile extends StatelessWidget {
               ),
             ],
           ),
-          ElevatedButton(onPressed: () {}, child: const Text('Submit')),
+          ElevatedButton(
+              onPressed: () {
+                Account old = context.read<AccountProvider>().acc!;
+                Account update = Account(
+                    accountID: old.accountID,
+                    username: userNameEditor.text,
+                    password: old.password,
+                    firstName: firstNameEditor.text,
+                    lastName: lastNameEditor.text,
+                    accountRole: old.accountRole,
+                    isActive: old.isActive,
+                    isStaff: old.isStaff,
+                    isSuperuser: old.isSuperuser);
+                Map<String, String> headers = {
+                  'Content-type': 'application/json',
+                  'Accept': 'application/json',
+                };
+
+                String url = '${Env.prefix}/account/update/';
+
+                http.post(Uri.parse(url),
+                    headers: headers, body: jsonEncode(update.toJson()));
+
+                context.read<AccountProvider>().setAccount(update);
+                Navigator.of(context)
+                    .popUntil((route) => route.settings.name == '/');
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ));
+              },
+              child: const Text('Submit')),
         ],
       ),
     );

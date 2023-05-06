@@ -10,8 +10,6 @@ from rest_framework.response import Response
 
 # Create your views here.
 class AccountView(viewsets.ModelViewSet):
-    queryset = Account.objects.all()
-    serializer_class = AccountSerializer
 
     @api_view(['POST'])
     def register(request):
@@ -53,27 +51,23 @@ class AccountView(viewsets.ModelViewSet):
                 return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
         except Account.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
-        
-    @api_view(['GET'])
-    def testAccount(request):
-        queryset = Account.objects.get(password = 1234)
-        serializer = AccountSerializer(queryset)
-        return Response(serializer.data)
     
     @api_view(['POST'])
     def updateAccount(request):
         account_data = json.loads(request.body)
-        account_id = account_data['account']
+        account_id = account_data['accountID']
         account = Account.objects.get(pk = account_id)
         account.username = account_data['username']
         account.password = account_data['password']
         account.firstName = account_data['firstName']
         account.lastName =  account_data['lastName']
+        account.accountRole = account_data['accountRole']
+        account.is_active = account_data['is_active']
+        account.is_staff = account_data['is_staff']
+        account.is_superuser = account_data['is_superuser']
         account.save()
 
 class VehicleView(viewsets.ModelViewSet):
-    queryset = Vehicle.objects.all()
-    serializer_class = VehicleSerializer
     
     @api_view(['GET'])
     def getVehicles(request):
@@ -109,8 +103,6 @@ class VehicleView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 class RentalView(viewsets.ModelViewSet):
-    queryset = RentalAgreement.objects.all()
-    serializer_class = RentalAgreementSerializer
     
     @api_view(['GET'])
     def getAgreements(request):
@@ -164,6 +156,18 @@ class RentalView(viewsets.ModelViewSet):
             serializer = RentalAgreementSerializer(rental_agreement)
             return Response(serializer.data)
         except RentalAgreement.DoesNotExist:
-            print('Agreement not found')    
+            print('Agreement not found')
+
+    @api_view(['POST'])
+    def getRecentTransaction(request):
+        data = json.loads(request.body)
+        id = data['account']
+        try:
+            recent = RentalAgreement.objects.filter(account = id).order_by('-rentDate').first()
+            serializer = RentalAgreementSerializer(recent)
+            return Response(serializer.data)
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')
+
         
 

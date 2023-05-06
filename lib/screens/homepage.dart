@@ -1,12 +1,50 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/profilescreen.dart';
 import 'package:vehicle_rental/screens/rentedcars.dart';
+import '../env.dart';
+import '../models/rentalagreement.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  RentalAgreement? agreement;
+
+  @override
+  void initState() {
+    super.initState();
+    getRecent(context);
+  }
+
+  Future<void> getRecent(BuildContext context) async {
+    var id = context.read<AccountProvider>().id;
+    final response = await http.post(
+      Uri.parse('${Env.prefix}/recent /'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'account': id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      RentalAgreement agreement = RentalAgreement.fromJson(data);
+      setState(() {
+        this.agreement = agreement;
+      });
+    } else {
+      throw Exception('Failed to get rent due');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +78,15 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   child: Row(
-                    children: [
-                      const SizedBox(
+                    children: const [
+                      SizedBox(
                         width: 8,
                       ),
-                      const Icon(Icons.search),
-                      const SizedBox(
+                      Icon(Icons.search),
+                      SizedBox(
                         width: 8,
                       ),
-                      const Expanded(
+                      Expanded(
                         child: TextField(
                           style: TextStyle(
                             fontSize: 17,
@@ -88,6 +126,7 @@ class HomePage extends StatelessWidget {
                 ),
                 Card(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
                         'Recent Transaction',
@@ -96,6 +135,19 @@ class HomePage extends StatelessWidget {
                             fontSize: 28,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          color: Colors.black,
+                        )),
+                        child: Column(
+                          children: [
+                            Text('Rent Date: ${agreement?.rentDate}'),
+                            Text('Number of Days: ${agreement?.numberOfDays}'),
+                            Text('Amount Due: ${agreement?.rentDue}'),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -126,6 +178,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       );
+
   Widget buildHeader(BuildContext context) => Container(
         color: Colors.blue.shade700,
         padding: EdgeInsets.only(
@@ -148,6 +201,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       );
+
   Widget buildMenu(BuildContext context) => Container(
         padding: const EdgeInsets.all(24),
         child: Wrap(

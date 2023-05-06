@@ -18,7 +18,7 @@ class AccountManager(BaseUserManager):
 class Account(AbstractBaseUser, PermissionsMixin):
     accountID = models.CharField(max_length=100, primary_key=True)
     username = models.CharField(max_length=100, unique=True)
-    password = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=100)
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     accountRole = models.CharField(max_length=100)

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
 import 'package:vehicle_rental/screens/registerpage.dart';
@@ -39,6 +40,7 @@ class LogInPage extends StatelessWidget {
     var width = size.width;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: bgColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,23 +48,22 @@ class LogInPage extends StatelessWidget {
               const SizedBox(
                 height: 0,
               ),
-              SizedBox(
-                width: width,
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.car_rental,
-                      size: 130,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.car_rental,
+                    size: 130,
+                  ),
+                  Text(
+                    'Vehicle Rental',
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: titleColor,
                     ),
-                    Text(
-                      'Vehicle Rental',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Column(
                 children: [
@@ -95,6 +96,8 @@ class LogInPage extends StatelessWidget {
                   onPressed: () async {
                     Account account = await _login();
                     context.read<AccountProvider>().setAccount(account);
+                    usernameController.clear();
+                    passwordController.clear();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const HomePage()));
                   },

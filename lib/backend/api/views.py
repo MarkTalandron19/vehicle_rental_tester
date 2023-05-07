@@ -10,19 +10,17 @@ from rest_framework.response import Response
 
 # Create your views here.
 class AccountView(viewsets.ModelViewSet):
-    queryset = Account.objects.all()
-    serializer_class = AccountSerializer
 
     @api_view(['POST'])
     def register(request):
         account_data = json.loads(request.body)
         account = Account.objects.create(
-            accountID=account_data['accountID'],
-            username=account_data['username'],
-            password=account_data['password'],
-            firstName=account_data['firstName'],
-            lastName=account_data['lastName'],
-            accountRole=account_data['accountRole']
+            accountID = account_data['accountID'],
+            username = account_data['username'],
+            password = account_data['password'],
+            firstName = account_data['firstName'],
+            lastName = account_data['lastName'],
+            accountRole = account_data['accountRole']
         )
         serializer = AccountSerializer(account)
         return Response(serializer.data)
@@ -53,25 +51,23 @@ class AccountView(viewsets.ModelViewSet):
                 return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
         except Account.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
-        
-    @api_view(['GET'])
-    def testAccount(request):
-        queryset = Account.objects.get(password = 1234)
-        serializer = AccountSerializer(queryset)
-        return Response(serializer.data)
     
     @api_view(['POST'])
-    def updateAccount(request, accountID):
-        account = Account.objects.get(pk = accountID)
-        account.username = request.POST.get('username', account.username)
-        account.password = request.POST.get('password', account.password)
-        account.firstName = request.POST.get('firstName', account.firstName)
-        account.lastName =  request.POST.get('lastName', account.password)
+    def updateAccount(request):
+        account_data = json.loads(request.body)
+        account_id = account_data['accountID']
+        account = Account.objects.get(pk = account_id)
+        account.username = account_data['username']
+        account.password = account_data['password']
+        account.firstName = account_data['firstName']
+        account.lastName =  account_data['lastName']
+        account.accountRole = account_data['accountRole']
+        account.is_active = account_data['is_active']
+        account.is_staff = account_data['is_staff']
+        account.is_superuser = account_data['is_superuser']
         account.save()
 
 class VehicleView(viewsets.ModelViewSet):
-    queryset = Vehicle.objects.all()
-    serializer_class = VehicleSerializer
     
     @api_view(['GET'])
     def getVehicles(request):
@@ -80,14 +76,16 @@ class VehicleView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
-    def update_vehicle(request, vehicleID):
-        vehicle = Vehicle.objects.get(pk = vehicleID)
-        vehicle.vehicleName = request.POST.get('vehicleName', vehicle.vehicleName)
-        vehicle.vehicleModel = request.POST.get('vehicleModel', vehicle.vehicleModel)
-        vehicle.vehicleBrand = request.POST.get('vehicleBrand', vehicle.vehicleBrand)
-        vehicle.vehicleManufacturer = request.POST.get('vehicleManufacturer', vehicle.vehicleManufacturer)
-        vehicle.vehicleType = request.POST.get('vehicleType', vehicle.vehicleType)
-        vehicle.vehicleRentRate = request.POST.get('vehicleRentRate', vehicle.vehicleRentRate)
+    def update_vehicle(request):
+        vehicle_data = json.loads(request.body)
+        vehicle_id = vehicle_data['vehicleID']
+        vehicle = Vehicle.objects.get(pk = vehicle_id)
+        vehicle.vehicleName = vehicle_data['vehicleName']
+        vehicle.vehicleModel = vehicle_data['vehicleModel']
+        vehicle.vehicleBrand = vehicle_data['vehicleBrand']
+        vehicle.vehicleManufacturer = vehicle_data['vehicleManufacturer']
+        vehicle.vehicleType = vehicle_data['vehicleType']
+        vehicle.vehicleRentRate = vehicle_data['vehicleRentRate']
         vehicle.available = request.POST.get('available', vehicle.available)
         vehicle.image = request.POST.get('image', vehicle.image)
         vehicle.save()
@@ -104,9 +102,19 @@ class VehicleView(viewsets.ModelViewSet):
         serializer = VehicleSerializer(rented_vehicles, many = True)
         return Response(serializer.data)
     
+    @api_view(['POST'])
+    def getRecentCar(request):
+        data = json.loads(request.body)
+        id = data['account']
+        try:
+            recent = RentalAgreement.objects.filter(account = id).order_by('-rentDate').first()
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')
+        recent_vehicle =  recent.vehicle
+        serializer = VehicleSerializer(recent_vehicle)
+        return Response(serializer.data)
+    
 class RentalView(viewsets.ModelViewSet):
-    queryset = RentalAgreement.objects.all()
-    serializer_class = RentalAgreementSerializer
     
     @api_view(['GET'])
     def getAgreements(request):
@@ -131,6 +139,7 @@ class RentalView(viewsets.ModelViewSet):
             rentID = rent_data['rentID'],
             rentDate = rent_data['rentDate'],
             numberOfDays = rent_data['numberOfDays'],
+            rentDue = rent_data['rentDue'],
             account = account,
             vehicle = vehicle,    
         )
@@ -140,10 +149,37 @@ class RentalView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
-    def updateRent(request, rentID):
-        rent = RentalAgreement.objects.get(pk = rentID)
-        rent.rentDate = request.POST.get('rentDate', rent.rentDate)
-        rent.numberOfDays = request.POST.get('numberOfDays', rent.numberOfDays)
+    def updateRent(request):
+        rent_data = json.loads(request.body)
+        rent_id = rent_data['rentID']
+        rent = RentalAgreement.objects.get(pk = rent_id)
+        rent.rentDate = rent_data['rentDate']
+        rent.numberOfDays = rent_data['numberOfDays']
         rent.save()
 
+    @api_view(['POST'])
+    def getDue(request):
+        data = json.loads(request.body)
+        account_id = data['account']
+        vehicle_id = data['vehicle']
+
+        try:
+            rental_agreement = RentalAgreement.objects.get(account = account_id, vehicle = vehicle_id)
+            serializer = RentalAgreementSerializer(rental_agreement)
+            return Response(serializer.data)
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')
+
+    @api_view(['POST'])
+    def getRecentTransaction(request):
+        data = json.loads(request.body)
+        id = data['account']
+        try:
+            recent = RentalAgreement.objects.filter(account = id).order_by('-rentDate').first()
+            serializer = RentalAgreementSerializer(recent)
+            return Response(serializer.data)
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')
+
+        
 

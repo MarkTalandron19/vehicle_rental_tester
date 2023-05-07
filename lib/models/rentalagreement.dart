@@ -18,7 +18,7 @@ class RentalAgreement {
     return RentalAgreement(
         rentID: json['rentID'],
         rentDate: json['rentDate'],
-        numberOfDays: json['numberOfDay'],
+        numberOfDays: json['numberOfDays'],
         rentDue: json['rentDue'],
         account: json['account'],
         vehicle: json['vehicle']);

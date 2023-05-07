@@ -1,13 +1,13 @@
 class Vehicle {
-  final String vehicleID;
-  final String vehicleName;
-  final String vehicleModel;
-  final String vehicleBrand;
-  final String vehicleManufacturer;
-  final String vehicleType;
-  final double vehicleRentRate;
-  final bool available;
-  final String image;
+  String? vehicleID;
+  String? vehicleName;
+  String? vehicleModel;
+  String? vehicleBrand;
+  String? vehicleManufacturer;
+  String? vehicleType;
+  double vehicleRentRate;
+  bool? available;
+  String? image;
 
   Vehicle(
       {required this.vehicleID,
@@ -16,7 +16,7 @@ class Vehicle {
       required this.vehicleBrand,
       required this.vehicleManufacturer,
       required this.vehicleType,
-      required this.vehicleRentRate,
+      this.vehicleRentRate = 0,
       required this.available,
       required this.image});
 

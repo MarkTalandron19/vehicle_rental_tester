@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:vehicle_rental/constants.dart';
@@ -65,9 +66,10 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         this.vehicle = vehicle;
       });
-    } else {
-      throw Exception('Failed to get recent car');
     }
+    // else {
+    //   throw Exception('Failed to get recent car');
+    // }
   }
 
   @override
@@ -137,6 +139,7 @@ class _HomePageState extends State<HomePage> {
                   shape: const RoundedRectangleBorder(
                     side: BorderSide(color: cardBorder),
                   ),
+                  shadowColor: Colors.black,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -174,6 +177,7 @@ class _HomePageState extends State<HomePage> {
                   shape: const RoundedRectangleBorder(
                     side: BorderSide(color: cardBorder),
                   ),
+                  shadowColor: Colors.black,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -185,45 +189,56 @@ class _HomePageState extends State<HomePage> {
                             color: titleColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Colors.black,
-                        )),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (vehicle != null)
-                              SizedBox(
-                                  height: 200,
-                                  child: Image.asset(
-                                    vehicle!.image,
-                                  )),
-                            Text(
-                              'Rent Date: ${agreement?.rentDate}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: textColor,
+                      agreement != null && vehicle != null
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                color: Colors.black,
+                              )),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  if (vehicle != null)
+                                    SizedBox(
+                                        height: 200,
+                                        child: Image.asset(
+                                          vehicle?.image ??
+                                              'images/cars/auto-mustang-autoachtergrond.jpg',
+                                        )),
+                                  Text(
+                                    'Rent Date: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(agreement?.rentDate ?? '') ?? DateTime.now())}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Number of Days: ${agreement?.numberOfDays}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Amount Due: ${agreement!.rentDue?.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                ],
                               ),
+                            )
+                          : const Text(
+                              'No new transactions',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  color: titleColor,
+                                  fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              'Number of Days: ${agreement?.numberOfDays}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: textColor,
-                              ),
-                            ),
-                            Text(
-                              'Amount Due: ${agreement?.rentDue.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: textColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

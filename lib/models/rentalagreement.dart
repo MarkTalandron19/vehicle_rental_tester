@@ -1,10 +1,10 @@
 class RentalAgreement {
-  String rentID;
-  String rentDate;
-  int numberOfDays;
-  double rentDue;
-  String account;
-  String vehicle;
+  String? rentID;
+  String? rentDate;
+  int? numberOfDays;
+  double? rentDue;
+  String? account;
+  String? vehicle;
 
   RentalAgreement(
       {required this.rentID,

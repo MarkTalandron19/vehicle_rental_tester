@@ -71,73 +71,79 @@ class _AvailableCarsState extends State<AvailableCars> {
                     child: Opacity(
                       opacity: data.available ? 1.0 : 0.5,
                       child: Card(
+                          color: cardColor,
+                          shape: const RoundedRectangleBorder(
+                            side: BorderSide(color: cardBorder),
+                          ),
+                          shadowColor: Colors.black,
                           child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(
-                              height: 130,
-                              child: data.available
-                                  ? Image.asset(
-                                      data.image,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : ColorFiltered(
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.grey, BlendMode.saturation),
-                                      child: Opacity(
-                                        opacity: 0.5,
-                                        child: Image.asset(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SizedBox(
+                                  height: 130,
+                                  child: data.available
+                                      ? Image.asset(
                                           data.image,
                                           fit: BoxFit.cover,
-                                        ),
+                                        )
+                                      : ColorFiltered(
+                                          colorFilter: const ColorFilter.mode(
+                                              Colors.grey,
+                                              BlendMode.saturation),
+                                          child: Opacity(
+                                            opacity: 0.5,
+                                            child: Image.asset(
+                                              data.image,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Name: ${data.vehicleName}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    )),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Name: ${data.vehicleName}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                    ),
+                                    Text(
+                                      'Model: ${data.vehicleModel}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Brand: ${data.vehicleBrand}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rental Rate: ${data.vehicleRentRate}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Available: ${data.available ? 'Yes' : 'No'}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  'Model: ${data.vehicleModel}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Brand: ${data.vehicleBrand}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Rental Rate: ${data.vehicleRentRate}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Available: ${data.available ? 'Yes' : 'No'}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )),
+                              )
+                            ],
+                          )),
                     ),
                   );
                 },

@@ -52,7 +52,7 @@ class _RentedCarsState extends State<RentedCars> {
       final data = json.decode(response.body);
       RentalAgreement agreement = RentalAgreement.fromJson(data);
       setState(() {
-        rentDueMap[vehicleID] = agreement.rentDue;
+        rentDueMap[vehicleID] = agreement.rentDue!;
       });
     } else {
       throw Exception('Failed to get rent due');

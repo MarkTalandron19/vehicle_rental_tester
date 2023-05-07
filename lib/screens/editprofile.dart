@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 
 import 'package:http/http.dart' as http;
@@ -21,6 +22,7 @@ class EditProfile extends StatelessWidget {
     firstNameEditor.text = context.read<AccountProvider>().firstName!;
     lastNameEditor.text = context.read<AccountProvider>().lastName!;
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Edit Account'),

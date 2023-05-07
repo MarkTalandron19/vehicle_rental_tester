@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vehicle_rental/constants.dart';
 import '../models/account.dart';
 
 class AccountWidget extends StatelessWidget {
@@ -20,6 +21,7 @@ class AccountWidget extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
+              color: textColor,
             ),
           ),
           const SizedBox(
@@ -30,6 +32,7 @@ class AccountWidget extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
+              color: textColor,
             ),
           ),
           const SizedBox(
@@ -40,6 +43,7 @@ class AccountWidget extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
+              color: textColor,
             ),
           ),
         ],

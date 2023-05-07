@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
 import 'package:vehicle_rental/screens/registerpage.dart';
@@ -39,6 +40,7 @@ class LogInPage extends StatelessWidget {
     var width = size.width;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: bgColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -58,6 +60,7 @@ class LogInPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
+                      color: titleColor,
                     ),
                   ),
                 ],

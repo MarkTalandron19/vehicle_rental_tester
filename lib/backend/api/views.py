@@ -102,6 +102,18 @@ class VehicleView(viewsets.ModelViewSet):
         serializer = VehicleSerializer(rented_vehicles, many = True)
         return Response(serializer.data)
     
+    @api_view(['POST'])
+    def getRecentCar(request):
+        data = json.loads(request.body)
+        id = data['account']
+        try:
+            recent = RentalAgreement.objects.filter(account = id).order_by('-rentDate').first()
+        except RentalAgreement.DoesNotExist:
+            print('Agreement not found')
+        recent_vehicle =  recent.vehicle
+        serializer = VehicleSerializer(recent_vehicle)
+        return Response(serializer.data)
+    
 class RentalView(viewsets.ModelViewSet):
     
     @api_view(['GET'])

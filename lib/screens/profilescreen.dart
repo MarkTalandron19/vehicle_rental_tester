@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/editprofile.dart';
 import 'package:vehicle_rental/widgets/accountwidget.dart';
@@ -10,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Profile'),

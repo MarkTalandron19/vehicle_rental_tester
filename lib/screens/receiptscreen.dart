@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
 
 class ReceiptScreen extends StatelessWidget {
@@ -10,9 +11,9 @@ class ReceiptScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: bgColor,
         body: Center(
           child: Container(
-            color: Colors.yellow,
             child: Padding(
               padding: const EdgeInsets.all(30.0),
               child: Column(

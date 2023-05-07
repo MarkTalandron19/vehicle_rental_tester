@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:vehicle_rental/constants.dart';
+import 'package:vehicle_rental/models/vehicle.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
 import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/profilescreen.dart';
@@ -19,17 +21,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   RentalAgreement? agreement;
+  Vehicle? vehicle;
 
   @override
   void initState() {
     super.initState();
-    getRecent(context);
+    getRecentTransaction(context);
+    getRecentVehicle(context);
   }
 
-  Future<void> getRecent(BuildContext context) async {
+  Future<void> getRecentTransaction(BuildContext context) async {
     var id = context.read<AccountProvider>().id;
     final response = await http.post(
-      Uri.parse('${Env.prefix}/recent /'),
+      Uri.parse('${Env.prefix}/recent/'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'account': id,
@@ -46,10 +50,31 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> getRecentVehicle(BuildContext context) async {
+    var id = context.read<AccountProvider>().id;
+    final response = await http.post(
+      Uri.parse('${Env.prefix}/recent_vehicle/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'account': id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      Vehicle vehicle = Vehicle.fromJson(data);
+      setState(() {
+        this.vehicle = vehicle;
+      });
+    } else {
+      throw Exception('Failed to get recent car');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: bgColor,
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Home'),
@@ -108,16 +133,36 @@ class _HomePageState extends State<HomePage> {
                   height: 50,
                 ),
                 Card(
+                  color: cardColor,
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide(color: cardBorder),
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
                         'New Arrivals',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 28,
-                            color: Colors.black,
+                            color: titleColor,
                             fontWeight: FontWeight.bold),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            child: Image.asset(
+                                'images/cars/auto-lada-russische-auto.jpg'),
+                          ),
+                          SizedBox(
+                            height: 100,
+                            child: Image.asset(
+                                'images/cars/auto-mustang-autoachtergrond.jpg'),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -125,6 +170,10 @@ class _HomePageState extends State<HomePage> {
                   height: 50,
                 ),
                 Card(
+                  color: cardColor,
+                  shape: const RoundedRectangleBorder(
+                    side: BorderSide(color: cardBorder),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -133,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 28,
-                            color: Colors.black,
+                            color: titleColor,
                             fontWeight: FontWeight.bold),
                       ),
                       Container(
@@ -142,10 +191,36 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                         )),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text('Rent Date: ${agreement?.rentDate}'),
-                            Text('Number of Days: ${agreement?.numberOfDays}'),
-                            Text('Amount Due: ${agreement?.rentDue}'),
+                            if (vehicle != null)
+                              SizedBox(
+                                  height: 200,
+                                  child: Image.asset(
+                                    vehicle!.image,
+                                  )),
+                            Text(
+                              'Rent Date: ${agreement?.rentDate}',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: textColor,
+                              ),
+                            ),
+                            Text(
+                              'Number of Days: ${agreement?.numberOfDays}',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: textColor,
+                              ),
+                            ),
+                            Text(
+                              'Amount Due: ${agreement?.rentDue.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: textColor,
+                              ),
+                            ),
                           ],
                         ),
                       )

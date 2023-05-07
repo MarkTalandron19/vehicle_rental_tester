@@ -13,5 +13,6 @@ urlpatterns = [
     path('rent/', RentalView.createRental, name = 'Create Rental'),
     path('rented/', VehicleView.getRentedCars, name = 'Rented'),
     path('due/', RentalView.getDue, name = 'Due'),
-    path('recent/', RentalView.getRecentTransaction, name = 'Recent')
+    path('recent/', RentalView.getRecentTransaction, name = 'Recent'),
+    path('recent_vehicle/', VehicleView.getRecentCar, name = 'Recent Car')
 ]

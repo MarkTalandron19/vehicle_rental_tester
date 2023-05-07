@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/models/account.dart';
 import 'dart:convert';
 
@@ -19,6 +20,7 @@ class RegisterPage extends StatelessWidget {
     TextEditingController lastNameController = TextEditingController();
 
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Register Page'),

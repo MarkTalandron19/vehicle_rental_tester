@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/models/Vehicle.dart';
 import 'package:vehicle_rental/screens/receiptscreen.dart';
 
@@ -24,7 +25,12 @@ class RentScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Rent Vehicle for How Many Days'),
+        title: const Text(
+          'Rent Vehicle for How Many Days',
+          style: TextStyle(
+            color: textColor,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

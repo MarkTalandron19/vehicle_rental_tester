@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/env.dart';
 import 'package:vehicle_rental/models/rentalagreement.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
@@ -61,6 +62,7 @@ class _RentedCarsState extends State<RentedCars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Rented Vehicles'),
@@ -78,6 +80,11 @@ class _RentedCarsState extends State<RentedCars> {
                     getRentDue(data.vehicleID);
                   }
                   return Card(
+                    color: cardColor,
+                    shape: const RoundedRectangleBorder(
+                        side: BorderSide(
+                      color: cardBorder,
+                    )),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,6 +104,7 @@ class _RentedCarsState extends State<RentedCars> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: textColor,
                                 ),
                               ),
                               Text(
@@ -104,6 +112,7 @@ class _RentedCarsState extends State<RentedCars> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: textColor,
                                 ),
                               ),
                               Text(
@@ -111,6 +120,7 @@ class _RentedCarsState extends State<RentedCars> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: textColor,
                                 ),
                               ),
                               Text(
@@ -118,6 +128,7 @@ class _RentedCarsState extends State<RentedCars> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: textColor,
                                 ),
                               ),
                             ],

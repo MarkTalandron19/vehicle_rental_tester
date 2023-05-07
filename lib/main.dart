@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
-import 'package:vehicle_rental/screens/availablecars.dart';
 import 'package:vehicle_rental/screens/loginpage.dart';
 
 void main() {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
       ),
       initialRoute: '/',
       routes: {'/': (context) => LogInPage()},

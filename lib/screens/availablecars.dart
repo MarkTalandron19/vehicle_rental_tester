@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/screens/rentscreen.dart';
 import '../env.dart';
 import '../models/Vehicle.dart';
@@ -36,6 +37,7 @@ class _AvailableCarsState extends State<AvailableCars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Available Cars'),

@@ -15,7 +15,7 @@ class LogInPage extends StatelessWidget {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  Future<Account> _login() async {
+  Future<Account?> _login() async {
     final url = Uri.parse('${Env.prefix}/login/');
     final response = await http.post(url,
         headers: <String, String>{
@@ -30,8 +30,39 @@ class LogInPage extends StatelessWidget {
       final account = Account.fromJson(jsonBody);
       return account;
     } else {
-      throw Exception('Failed to login');
+      return null;
     }
+  }
+
+  Future<void> showFailure(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text("Failed to login.",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                )),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          );
+        }));
   }
 
   @override
@@ -94,12 +125,16 @@ class LogInPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () async {
-                    Account account = await _login();
-                    context.read<AccountProvider>().setAccount(account);
-                    usernameController.clear();
-                    passwordController.clear();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HomePage()));
+                    Account? account = await _login();
+                    if (account != null) {
+                      context.read<AccountProvider>().setAccount(account);
+                      usernameController.clear();
+                      passwordController.clear();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                    } else {
+                      showFailure(context);
+                    }
                   },
                   child: const Text('Log In'),
                 ),

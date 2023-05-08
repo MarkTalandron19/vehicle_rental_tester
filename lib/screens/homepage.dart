@@ -222,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Text(
-                                    'Amount Due: ${agreement!.rentDue?.toStringAsFixed(2)}',
+                                    'Amount Due: \$${agreement!.rentDue?.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       color: textColor,
@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             const CircleAvatar(
               radius: 52,
-              child: Text('M'),
+              child: Icon(Icons.person_2),
             ),
             const SizedBox(
               height: 12,

@@ -41,7 +41,7 @@ class AccountView(viewsets.ModelViewSet):
             return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
 
         try:
-            account = Account.objects.get(username=username)
+            account = Account.objects.get(username = username, password = password)
             if account:
                 account.last_login = timezone.now()
                 account.save()

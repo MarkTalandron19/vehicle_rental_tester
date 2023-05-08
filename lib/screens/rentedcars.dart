@@ -18,11 +18,43 @@ class RentedCars extends StatefulWidget {
 class _RentedCarsState extends State<RentedCars> {
   late Future<List<Vehicle>> rented;
   Map<String, double> rentDueMap = {};
+  Map<String, int> daysMap = {};
 
   @override
   void initState() {
     super.initState();
     rented = getRented();
+  }
+
+  Future<void> showFailure(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text("Failed to get rent due.",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                )),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          );
+        }));
   }
 
   Future<List<Vehicle>> getRented() async {
@@ -39,7 +71,7 @@ class _RentedCarsState extends State<RentedCars> {
     return rents;
   }
 
-  Future<void> getRentDue(String vehicleID) async {
+  Future<void> getRentInfo(String vehicleID) async {
     final response = await http.post(
       Uri.parse('${Env.prefix}/due/'),
       headers: {'Content-Type': 'application/json'},
@@ -53,9 +85,10 @@ class _RentedCarsState extends State<RentedCars> {
       RentalAgreement agreement = RentalAgreement.fromJson(data);
       setState(() {
         rentDueMap[vehicleID] = agreement.rentDue!;
+        daysMap[vehicleID] = agreement.numberOfDays!;
       });
     } else {
-      throw Exception('Failed to get rent due');
+      showFailure(context);
     }
   }
 
@@ -76,8 +109,9 @@ class _RentedCarsState extends State<RentedCars> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var data = snapshot.data[index];
-                  if (!rentDueMap.containsKey(data.vehicleID)) {
-                    getRentDue(data.vehicleID);
+                  if (!rentDueMap.containsKey(data.vehicleID) &&
+                      !daysMap.containsKey(data.vehicleID)) {
+                    getRentInfo(data.vehicleID);
                   }
                   return Card(
                     color: cardColor,
@@ -124,7 +158,15 @@ class _RentedCarsState extends State<RentedCars> {
                                 ),
                               ),
                               Text(
-                                'Amount Due: ${rentDueMap[data.vehicleID] ?? ""}',
+                                'Number of Days: ${daysMap[data.vehicleID] ?? ""}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor,
+                                ),
+                              ),
+                              Text(
+                                'Amount Due: \$${rentDueMap[data.vehicleID] ?? ""}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

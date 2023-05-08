@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -17,6 +18,37 @@ class RentScreen extends StatelessWidget {
   TextEditingController daysController = TextEditingController();
   RentScreen({super.key, required this.current});
 
+  Future<void> showFailure(BuildContext context, String message) async {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text("Input number of days.",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                )),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          );
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     String image = current.image ?? 'null';
@@ -25,9 +57,6 @@ class RentScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'Rent Vehicle for How Many Days',
-          style: TextStyle(
-            color: textColor,
-          ),
         ),
       ),
       body: Padding(
@@ -57,6 +86,9 @@ class RentScreen extends StatelessWidget {
                     width: 200,
                     child: TextField(
                       controller: daysController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
                       decoration:
                           const InputDecoration(border: OutlineInputBorder()),
                     ),
@@ -65,37 +97,43 @@ class RentScreen extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    String id = const Uuid().v4();
-                    String accountID = context.read<AccountProvider>().id!;
-                    DateTime now = DateTime.now();
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-                    int days = int.parse(daysController.text);
-                    RentalAgreement newAgreement = RentalAgreement(
-                      rentID: id,
-                      rentDate: formattedDate,
-                      numberOfDays: days,
-                      rentDue: (current.vehicleRentRate * days) * 100,
-                      account: accountID,
-                      vehicle: current.vehicleID,
-                    );
-                    Map<String, String> headers = {
-                      'Content-type': 'application/json',
-                      'Accept': 'application/json',
-                    };
+                    if (daysController.text.isNotEmpty) {
+                      String id = const Uuid().v4();
+                      String accountID = context.read<AccountProvider>().id!;
+                      DateTime now = DateTime.now();
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+                      int days = int.parse(daysController.text);
+                      RentalAgreement newAgreement = RentalAgreement(
+                        rentID: id,
+                        rentDate: formattedDate,
+                        numberOfDays: days,
+                        rentDue: (current.vehicleRentRate * days) * 100,
+                        account: accountID,
+                        vehicle: current.vehicleID,
+                      );
+                      Map<String, String> headers = {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                      };
 
-                    String url = '${Env.prefix}/rent/';
+                      String url = '${Env.prefix}/rent/';
 
-                    http.post(Uri.parse(url),
-                        headers: headers,
-                        body: jsonEncode(newAgreement.toJson()));
+                      http.post(Uri.parse(url),
+                          headers: headers,
+                          body: jsonEncode(newAgreement.toJson()));
 
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ReceiptScreen(
-                        numberOfDays: newAgreement.numberOfDays!,
-                        rentDue: newAgreement.rentDue!,
-                      ),
-                    ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ReceiptScreen(
+                          numberOfDays: newAgreement.numberOfDays!,
+                          rentDue: newAgreement.rentDue!,
+                        ),
+                      ));
+                    } else if (daysController.text == '0') {
+                      showFailure(context, 'Inputted a zero');
+                    } else {
+                      showFailure(context, 'Input number of days.');
+                    }
                   },
                   child: const Text('Submit')),
             ],

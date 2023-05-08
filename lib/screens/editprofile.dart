@@ -13,6 +13,37 @@ import 'homepage.dart';
 class EditProfile extends StatelessWidget {
   const EditProfile({super.key});
 
+  Future<void> showFailure(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text("Failed to edit.",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                )),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          );
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController userNameEditor = TextEditingController();
@@ -89,33 +120,39 @@ class EditProfile extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                Account old = context.read<AccountProvider>().acc!;
-                Account update = Account(
-                    accountID: old.accountID,
-                    username: userNameEditor.text,
-                    password: old.password,
-                    firstName: firstNameEditor.text,
-                    lastName: lastNameEditor.text,
-                    accountRole: old.accountRole,
-                    isActive: old.isActive,
-                    isStaff: old.isStaff,
-                    isSuperuser: old.isSuperuser);
-                Map<String, String> headers = {
-                  'Content-type': 'application/json',
-                  'Accept': 'application/json',
-                };
+                if (userNameEditor.text.isNotEmpty &&
+                    firstNameEditor.text.isNotEmpty &&
+                    lastNameEditor.text.isNotEmpty) {
+                  Account old = context.read<AccountProvider>().acc!;
+                  Account update = Account(
+                      accountID: old.accountID,
+                      username: userNameEditor.text,
+                      password: old.password,
+                      firstName: firstNameEditor.text,
+                      lastName: lastNameEditor.text,
+                      accountRole: old.accountRole,
+                      isActive: old.isActive,
+                      isStaff: old.isStaff,
+                      isSuperuser: old.isSuperuser);
+                  Map<String, String> headers = {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                  };
 
-                String url = '${Env.prefix}/account/update/';
+                  String url = '${Env.prefix}/account/update/';
 
-                http.post(Uri.parse(url),
-                    headers: headers, body: jsonEncode(update.toJson()));
+                  http.post(Uri.parse(url),
+                      headers: headers, body: jsonEncode(update.toJson()));
 
-                context.read<AccountProvider>().setAccount(update);
-                Navigator.of(context)
-                    .popUntil((route) => route.settings.name == '/');
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ));
+                  context.read<AccountProvider>().setAccount(update);
+                  Navigator.of(context)
+                      .popUntil((route) => route.settings.name == '/');
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ));
+                } else {
+                  showFailure(context);
+                }
               },
               child: const Text('Submit')),
         ],

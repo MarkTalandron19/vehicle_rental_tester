@@ -10,6 +10,37 @@ import '../env.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
+  Future<void> showFailure(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text(
+              "Error",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.red,
+              ),
+            ),
+            content: const Text("Failed to register.",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                )),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              )
+            ],
+          );
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -82,28 +113,36 @@ class RegisterPage extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  String id = const Uuid().v4();
-                  Account newAccount = Account(
-                      accountID: id,
-                      username: usernameController.text,
-                      password: passwordController.text,
-                      firstName: firstNameController.text,
-                      lastName: lastNameController.text,
-                      accountRole: 'User',
-                      isActive: true,
-                      isStaff: false,
-                      isSuperuser: false);
-                  Map<String, String> headers = {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                  };
+                  if (usernameController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty &&
+                      firstNameController.text.isNotEmpty &&
+                      lastNameController.text.isNotEmpty) {
+                    String id = const Uuid().v4();
+                    Account newAccount = Account(
+                        accountID: id,
+                        username: usernameController.text,
+                        password: passwordController.text,
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        accountRole: 'User',
+                        isActive: true,
+                        isStaff: false,
+                        isSuperuser: false);
+                    Map<String, String> headers = {
+                      'Content-type': 'application/json',
+                      'Accept': 'application/json',
+                    };
 
-                  String url = '${Env.prefix}/register/';
+                    String url = '${Env.prefix}/register/';
 
-                  http.post(Uri.parse(url),
-                      headers: headers, body: jsonEncode(newAccount.toJson()));
+                    http.post(Uri.parse(url),
+                        headers: headers,
+                        body: jsonEncode(newAccount.toJson()));
 
-                  Navigator.pop(context);
+                    Navigator.pop(context);
+                  } else {
+                    showFailure(context);
+                  }
                 },
                 child: const Text('Submit'),
               ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vehicle_rental/constants.dart';
 import 'package:vehicle_rental/providers/accountprovider.dart';
+import 'package:vehicle_rental/screens/adminpage.dart';
 import 'package:vehicle_rental/screens/homepage.dart';
 import 'package:vehicle_rental/screens/registerpage.dart';
 import 'package:http/http.dart' as http;
@@ -130,8 +131,13 @@ class LogInPage extends StatelessWidget {
                       context.read<AccountProvider>().setAccount(account);
                       usernameController.clear();
                       passwordController.clear();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                      if (context.read<AccountProvider>().role == 'User') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                      } else {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AdminPage()));
+                      }
                     } else {
                       showFailure(context);
                     }

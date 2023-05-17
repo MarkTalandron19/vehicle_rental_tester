@@ -68,7 +68,24 @@ class AccountView(viewsets.ModelViewSet):
         account.save()
 
 class VehicleView(viewsets.ModelViewSet):
-    
+  
+    @api_view(['POST'])
+    def addVehicle(request):
+        vehicle_data = json.loads(request.body)
+        vehicle = Vehicle.objects.create(
+            vehicleID = vehicle_data['vehicleID'],
+            vehicleName = vehicle_data['vehicleName'],
+            vehicleModel = vehicle_data['vehicleModel'],
+            vehicleBrand = vehicle_data['vehicleBrand'],
+            vehicleManufacturer = vehicle_data['vehicleManufacturer'],
+            vehicleType = vehicle_data['vehicleType'],
+            vehicleRentRate = vehicle_data['vehicleRentRate'],
+            available = vehicle_data['available'],
+            image = vehicle_data['image']
+        )
+        serializer = VehicleSerializer(vehicle)
+        return Response(serializer.data)
+      
     @api_view(['GET'])
     def getVehicles(request):
         queryset = Vehicle.objects.all()
@@ -79,16 +96,18 @@ class VehicleView(viewsets.ModelViewSet):
     def update_vehicle(request):
         vehicle_data = json.loads(request.body)
         vehicle_id = vehicle_data['vehicleID']
-        vehicle = Vehicle.objects.get(pk = vehicle_id)
+        vehicle = Vehicle.objects.get(vehicleID = vehicle_id)
         vehicle.vehicleName = vehicle_data['vehicleName']
         vehicle.vehicleModel = vehicle_data['vehicleModel']
         vehicle.vehicleBrand = vehicle_data['vehicleBrand']
         vehicle.vehicleManufacturer = vehicle_data['vehicleManufacturer']
         vehicle.vehicleType = vehicle_data['vehicleType']
         vehicle.vehicleRentRate = vehicle_data['vehicleRentRate']
-        vehicle.available = request.POST.get('available', vehicle.available)
-        vehicle.image = request.POST.get('image', vehicle.image)
+        vehicle.available = vehicle_data['available']
+        vehicle.image = vehicle_data['image']
         vehicle.save()
+        serializer = VehicleSerializer(vehicle)
+        return Response(serializer.data)
     
     @api_view(['POST'])
     def getRentedCars(request):
@@ -156,6 +175,8 @@ class RentalView(viewsets.ModelViewSet):
         rent.rentDate = rent_data['rentDate']
         rent.numberOfDays = rent_data['numberOfDays']
         rent.save()
+        serializer = RentalAgreementSerializer(rent)
+        return Response(serializer.data)
 
     @api_view(['POST'])
     def getDue(request):

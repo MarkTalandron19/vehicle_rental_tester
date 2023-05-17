@@ -14,5 +14,9 @@ urlpatterns = [
     path('rented/', VehicleView.getRentedCars, name = 'Rented'),
     path('due/', RentalView.getDue, name = 'Due'),
     path('recent/', RentalView.getRecentTransaction, name = 'Recent'),
-    path('recent_vehicle/', VehicleView.getRecentCar, name = 'Recent Car')
+    path('recent_vehicle/', VehicleView.getRecentCar, name = 'Recent Car'),
+    path('add_vehicle/', VehicleView.addVehicle, name = 'Add Vehicle'),
+    path('edit_vehicle/', VehicleView.update_vehicle, name = 'Update Vehicle'),
+    path('add_agreement/', RentalView.createRental, name = 'Add Rental'),
+    path('edit_agreement/', RentalView.updateRent, name = 'Update Agreement')
 ]

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vehicle_rental/models/vehicle.dart';
 import 'package:http/http.dart' as http;
+import 'package:vehicle_rental/screens/adminpage.dart';
 import '../constants.dart';
 import '../env.dart';
 
@@ -186,7 +187,11 @@ class AddVehiclePage extends StatelessWidget {
                           headers: headers,
                           body: jsonEncode(newVehicle.toJson()));
 
-                      Navigator.pop(context);
+                      Navigator.of(context)
+                          .popUntil((route) => route.settings.name == '/');
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const AdminPage(),
+                      ));
                     } else {
                       showFailure(context);
                     }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vehicle_rental/screens/accountspage.dart';
 import 'package:vehicle_rental/screens/rentalagreementspage.dart';
 import 'package:vehicle_rental/screens/vehiclespage.dart';
+
+import '../providers/accountprovider.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
@@ -12,6 +15,14 @@ class AdminPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Admin Page'),
+        actions: <Widget>[
+          ElevatedButton(
+              onPressed: () {
+                context.read<AccountProvider>().setNull();
+                Navigator.pop(context);
+              },
+              child: const Text('Log Out'))
+        ],
       ),
       body: Center(
         child: Column(

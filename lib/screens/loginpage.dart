@@ -28,12 +28,14 @@ class LogInPage extends StatelessWidget {
         }));
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
-      final account = Account.fromJson(jsonBody);
+      Map<String, dynamic> user = jsonBody['user'];
+      Env.token = jsonBody['token'];
+      final account = Account.fromJson(user);
       return account;
     } else {
       return null;
     }
-  }
+  } //ebcd45a5838f7ad9fbc10e3f02e5966e7596dfc5
 
   Future<void> showFailure(BuildContext context) async {
     return showDialog(

@@ -1,11 +1,15 @@
 from django.utils import timezone
 import json
-import statistics
 from api.models import Account, Vehicle, RentalAgreement
 from api.serializers import AccountSerializer, VehicleSerializer, RentalAgreementSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 # Create your views here.
@@ -32,25 +36,30 @@ class AccountView(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     @api_view(['POST'])
+    @permission_classes([permissions.AllowAny]) 
     def getLogIn(request):
         username = request.data.get('username')
         password = request.data.get('password')
     
         # validate username and password
         if not username or not password:
-            return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             account = Account.objects.get(username = username, password = password)
-            if account:
+            if account: 
                 account.last_login = timezone.now()
                 account.save()
                 serializer = AccountSerializer(account)
-                return Response(serializer.data)
+                token, created = Token.objects.get_or_create(user=account)
+                if not created:
+                    token.delete()
+                    token = Token.objects.create(user=account)
+                return Response({'user': serializer.data, 'token': token.key}, status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
+                return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         except Account.DoesNotExist:
-            return Response({'error': 'Invalid credentials'}, status=statistics.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
     @api_view(['POST'])
     def updateAccount(request):

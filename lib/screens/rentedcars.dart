@@ -59,7 +59,10 @@ class _RentedCarsState extends State<RentedCars> {
 
   Future<List<Vehicle>> getRented() async {
     final url = Uri.parse('${Env.prefix}/rented/');
-    final headers = {'Content-Type': 'application/json'};
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ${Env.token}'
+    };
     final accountID = context.read<AccountProvider>().id!;
     final body = jsonEncode({'account': accountID});
     final response = await http.post(url, headers: headers, body: body);
